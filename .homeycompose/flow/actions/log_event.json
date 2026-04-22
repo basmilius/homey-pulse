@@ -1,0 +1,103 @@
+{
+    "id": "log_event",
+    "title": {
+        "en": "Log a custom event",
+        "nl": "Log een aangepast event",
+        "de": "Ein benutzerdefiniertes Ereignis protokollieren",
+        "fr": "Enregistrer un evenement personnalise",
+        "it": "Registra un evento personalizzato",
+        "sv": "Logga en anpassad handelse",
+        "no": "Logg en egendefinert hendelse",
+        "es": "Registrar un evento personalizado",
+        "da": "Log en brugerdefineret haendelse",
+        "ru": "Записать пользовательское событие",
+        "pl": "Zapisz niestandardowe zdarzenie",
+        "ko": "사용자 정의 이벤트 기록",
+        "ar": "تسجيل حدث مخصص"
+    },
+    "titleFormatted": {
+        "en": "Log event [[message]] in category [[category]]",
+        "nl": "Log event [[message]] in categorie [[category]]",
+        "de": "Ereignis [[message]] in Kategorie [[category]] protokollieren",
+        "fr": "Enregistrer l'evenement [[message]] dans la categorie [[category]]",
+        "it": "Registra evento [[message]] nella categoria [[category]]",
+        "sv": "Logga handelse [[message]] i kategori [[category]]",
+        "no": "Logg hendelse [[message]] i kategori [[category]]",
+        "es": "Registrar evento [[message]] en categoria [[category]]",
+        "da": "Log haendelse [[message]] i kategori [[category]]",
+        "ru": "Записать событие [[message]] в категорию [[category]]",
+        "pl": "Zapisz zdarzenie [[message]] w kategorii [[category]]",
+        "ko": "카테고리 [[category]]에 이벤트 [[message]] 기록",
+        "ar": "تسجيل الحدث [[message]] في الفئة [[category]]"
+    },
+    "args": [
+        {
+            "type": "text",
+            "name": "category",
+            "title": {
+                "en": "Category",
+                "nl": "Categorie",
+                "de": "Kategorie",
+                "fr": "Categorie",
+                "it": "Categoria",
+                "sv": "Kategori",
+                "no": "Kategori",
+                "es": "Categoria",
+                "da": "Kategori",
+                "ru": "Категория",
+                "pl": "Kategoria",
+                "ko": "카테고리",
+                "ar": "الفئة"
+            },
+            "placeholder": {
+                "en": "motion",
+                "nl": "beweging",
+                "de": "Bewegung",
+                "fr": "mouvement",
+                "it": "movimento",
+                "sv": "rorelse",
+                "no": "bevegelse",
+                "es": "movimiento",
+                "da": "bevaegelse",
+                "ru": "движение",
+                "pl": "ruch",
+                "ko": "모션",
+                "ar": "حركة"
+            }
+        },
+        {
+            "type": "text",
+            "name": "message",
+            "title": {
+                "en": "Message",
+                "nl": "Bericht",
+                "de": "Nachricht",
+                "fr": "Message",
+                "it": "Messaggio",
+                "sv": "Meddelande",
+                "no": "Melding",
+                "es": "Mensaje",
+                "da": "Besked",
+                "ru": "Сообщение",
+                "pl": "Wiadomosc",
+                "ko": "메시지",
+                "ar": "الرسالة"
+            },
+            "placeholder": {
+                "en": "Motion detected at front door",
+                "nl": "Beweging gedetecteerd bij de voordeur",
+                "de": "Bewegung an der Haustur erkannt",
+                "fr": "Mouvement detecte a la porte d'entree",
+                "it": "Movimento rilevato alla porta d'ingresso",
+                "sv": "Rorelse upptackt vid ytterdorren",
+                "no": "Bevegelse oppdaget ved ytterdoren",
+                "es": "Movimiento detectado en la puerta principal",
+                "da": "Bevaegelse registreret ved hoveddoren",
+                "ru": "Обнаружено движение у входной двери",
+                "pl": "Wykryto ruch przy drzwiach wejsciowych",
+                "ko": "현관문에서 모션 감지됨",
+                "ar": "تم اكتشاف حركة عند الباب الامامي"
+            }
+        }
+    ]
+}

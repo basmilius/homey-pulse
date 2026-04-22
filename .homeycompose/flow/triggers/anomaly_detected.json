@@ -1,0 +1,80 @@
+{
+    "id": "anomaly_detected",
+    "title": {
+        "en": "Anomaly detected",
+        "nl": "Anomalie gedetecteerd",
+        "de": "Anomalie erkannt",
+        "fr": "Anomalie detectee",
+        "it": "Anomalia rilevata",
+        "sv": "Avvikelse upptackt",
+        "no": "Avvik oppdaget",
+        "es": "Anomalia detectada",
+        "da": "Anomali registreret",
+        "ru": "Обнаружена аномалия",
+        "pl": "Wykryto anomalie",
+        "ko": "이상 감지됨",
+        "ar": "تم اكتشاف شذوذ"
+    },
+    "hint": {
+        "en": "Triggers when Claude detects unusual activity in the home events.",
+        "nl": "Triggert wanneer Claude ongebruikelijke activiteit in de huisevents detecteert.",
+        "de": "Wird ausgelost wenn Claude ungewohnliche Aktivitat in den Hausereignissen erkennt.",
+        "fr": "Se declenche lorsque Claude detecte une activite inhabituelle dans les evenements de la maison.",
+        "it": "Si attiva quando Claude rileva attivita insolita negli eventi domestici.",
+        "sv": "Utloses nar Claude upptacker ovanlig aktivitet i hemhandelserna.",
+        "no": "Utloses nar Claude oppdager uvanlig aktivitet i hjemmehendelsene.",
+        "es": "Se activa cuando Claude detecta actividad inusual en los eventos del hogar.",
+        "da": "Udloses nar Claude opdager usaedvanlig aktivitet i hjemmehaendelserne.",
+        "ru": "Срабатывает когда Claude обнаруживает необычную активность в домашних событиях.",
+        "pl": "Wyzwalany gdy Claude wykryje nietypowa aktywnosc w zdarzeniach domowych.",
+        "ko": "Claude가 집 이벤트에서 비정상적인 활동을 감지했을 때 트리거됩니다.",
+        "ar": "يتم تشغيله عندما يكتشف Claude نشاطا غير عادي في احداث المنزل."
+    },
+    "tokens": [
+        {
+            "name": "description",
+            "type": "string",
+            "title": {
+                "en": "Description",
+                "nl": "Beschrijving",
+                "de": "Beschreibung",
+                "fr": "Description",
+                "it": "Descrizione",
+                "sv": "Beskrivning",
+                "no": "Beskrivelse",
+                "es": "Descripcion",
+                "da": "Beskrivelse",
+                "ru": "Описание",
+                "pl": "Opis",
+                "ko": "설명",
+                "ar": "الوصف"
+            },
+            "example": {
+                "en": "Unusual motion detected in the garage at 3:00 AM, while no one is typically home.",
+                "nl": "Ongebruikelijke beweging gedetecteerd in de garage om 3:00 uur, terwijl normaal niemand thuis is."
+            }
+        },
+        {
+            "name": "severity",
+            "type": "string",
+            "title": {
+                "en": "Severity",
+                "nl": "Ernst",
+                "de": "Schweregrad",
+                "fr": "Gravite",
+                "it": "Gravita",
+                "sv": "Allvarlighetsgrad",
+                "no": "Alvorlighetsgrad",
+                "es": "Gravedad",
+                "da": "Alvorlighedsgrad",
+                "ru": "Серьезность",
+                "pl": "Waznosc",
+                "ko": "심각도",
+                "ar": "الخطورة"
+            },
+            "example": {
+                "en": "warning"
+            }
+        }
+    ]
+}

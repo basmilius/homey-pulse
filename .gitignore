@@ -1,0 +1,9 @@
+/env.json
+/node_modules/
+/.claude/
+/.homeybuild/
+.idea/*
+/package-lock.json
+
+!/.idea/.name
+!/.idea/icon.svg

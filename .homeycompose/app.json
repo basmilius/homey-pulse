@@ -1,0 +1,93 @@
+{
+    "id": "com.basmilius.pulse",
+    "version": "1.0.0",
+    "compatibility": ">=12.4.0",
+    "sdk": 3,
+    "brandColor": "#dc2626",
+    "platforms": [
+        "local"
+    ],
+    "name": {
+        "en": "Pulse",
+        "nl": "Pulse"
+    },
+    "description": {
+        "en": "The pulse of your smart home. Automatic tracking with AI-powered insights.",
+        "nl": "De hartslag van je smart home. Automatische tracking met AI-gestuurde inzichten."
+    },
+    "category": [
+        "tools"
+    ],
+    "tags": {
+        "en": [
+            "pulse",
+            "log",
+            "history",
+            "ai",
+            "insights",
+            "tracker",
+            "events",
+            "automation"
+        ],
+        "nl": [
+            "pulse",
+            "logboek",
+            "geschiedenis",
+            "ai",
+            "inzichten",
+            "tracker",
+            "events",
+            "automatisering"
+        ]
+    },
+    "permissions": [
+        "homey:manager:api"
+    ],
+    "images": {
+        "small": "/assets/images/small.png",
+        "large": "/assets/images/large.png",
+        "xlarge": "/assets/images/xlarge.png"
+    },
+    "author": {
+        "name": "Bas Milius",
+        "email": "bas@mili.us"
+    },
+    "bugs": {
+        "url": "https://github.com/basmilius/homey-pulse/issues"
+    },
+    "homepage": "https://bas.dev",
+    "source": "https://github.com/basmilius/homey-pulse",
+    "support": "https://github.com/basmilius/homey-pulse/issues",
+    "contributing": {
+        "donate": {
+            "paypal": {
+                "username": "basmilius"
+            },
+            "githubSponsors": {
+                "username": "basmilius"
+            }
+        }
+    },
+    "api": {
+        "getSettings": {
+            "method": "GET",
+            "path": "/settings"
+        },
+        "saveSettings": {
+            "method": "PUT",
+            "path": "/settings"
+        },
+        "testConnection": {
+            "method": "POST",
+            "path": "/test-connection"
+        },
+        "getStats": {
+            "method": "GET",
+            "path": "/stats"
+        },
+        "getZones": {
+            "method": "GET",
+            "path": "/zones"
+        }
+    }
+}

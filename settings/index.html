@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <script type="text/javascript" src="/homey.js" data-origin="settings"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 16px; color: #333; background: transparent; }
+        h2 { font-size: 1rem; font-weight: 600; margin: 24px 0 8px; }
+        h2:first-child { margin-top: 0; }
+        p.hint { color: #666; font-size: .8125rem; margin: 0 0 8px; }
+        label { display: block; font-size: .875rem; font-weight: 500; margin-bottom: 4px; }
+        input[type="text"], input[type="password"], input[type="number"], select {
+            width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px;
+            font-size: .875rem; background: #fff; margin-bottom: 12px;
+        }
+        input:focus, select:focus { outline: none; border-color: #4F46E5; box-shadow: 0 0 0 2px rgba(79,70,229,.15); }
+        .btn { display: inline-block; padding: 8px 16px; border: none; border-radius: 6px; font-size: .875rem; font-weight: 500; cursor: pointer; }
+        .btn-primary { background: #4F46E5; color: #fff; }
+        .btn-primary:hover { background: #4338CA; }
+        .btn-row { display: flex; gap: 8px; margin: 8px 0 12px; }
+        .msg-success { color: #059669; font-size: .8125rem; margin-top: 4px; }
+        .msg-error { color: #DC2626; font-size: .8125rem; margin-top: 4px; }
+        .stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 8px 0; }
+        .stat { background: #F3F4F6; border-radius: 8px; padding: 12px; text-align: center; }
+        .stat-value { font-size: 1.5rem; font-weight: 700; color: #4F46E5; }
+        .stat-label { font-size: .75rem; color: #666; margin-top: 2px; }
+        .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+        .tag { display: inline-flex; align-items: center; gap: 4px; background: #EEF2FF; color: #4F46E5; padding: 4px 10px; border-radius: 999px; font-size: .8125rem; }
+        .tag button { background: none; border: none; color: #4F46E5; cursor: pointer; font-size: 1rem; line-height: 1; padding: 0; }
+        .tag button:hover { color: #DC2626; }
+        .checkbox-list { margin-bottom: 12px; }
+        .checkbox-list label { display: flex; align-items: center; gap: 8px; font-weight: 400; padding: 4px 0; cursor: pointer; }
+        .checkbox-list input[type="checkbox"] { width: 16px; height: 16px; accent-color: #4F46E5; }
+        .divider { border: none; border-top: 1px solid #E5E7EB; margin: 20px 0; }
+        .api-key-group { display: none; }
+        .api-key-group.active { display: block; }
+    </style>
+</head>
+<body>
+
+<h2>AI Provider</h2>
+<p class="hint">Choose which AI provider to use for generating summaries.</p>
+<select id="provider">
+    <option value="anthropic">Anthropic (Claude)</option>
+    <option value="openai">OpenAI (ChatGPT)</option>
+    <option value="gemini">Google (Gemini)</option>
+</select>
+
+<div id="apiKeyAnthropic" class="api-key-group">
+    <label>Anthropic API Key</label>
+    <input type="password" id="apiKeyAnthropicInput" placeholder="sk-ant-...">
+</div>
+<div id="apiKeyOpenai" class="api-key-group">
+    <label>OpenAI API Key</label>
+    <input type="password" id="apiKeyOpenaiInput" placeholder="sk-...">
+</div>
+<div id="apiKeyGemini" class="api-key-group">
+    <label>Google AI API Key</label>
+    <input type="password" id="apiKeyGeminiInput" placeholder="AIza...">
+</div>
+
+<div class="btn-row">
+    <button class="btn btn-primary" id="btnTestConnection">Test Connection</button>
+</div>
+<div id="testResult"></div>
+
+<hr class="divider">
+
+<h2>Model</h2>
+<p class="hint">The model used for generating summaries. Options depend on the selected provider.</p>
+<select id="defaultModel"></select>
+
+<hr class="divider">
+
+<h2>Tracking</h2>
+
+<label for="sampleInterval">Sample interval (minutes)</label>
+<p class="hint">How often measurement values (temperature, power, etc.) are recorded.</p>
+<input type="number" id="sampleInterval" min="1" max="60" step="1" value="15">
+
+<label for="retentionDays">Retention (days)</label>
+<p class="hint">How many days of event data to keep before automatic cleanup.</p>
+<input type="number" id="retentionDays" min="1" max="365" step="1" value="30">
+
+<hr class="divider">
+
+<h2>Excluded Zones</h2>
+<p class="hint">Select zones to exclude from tracking.</p>
+<div id="zoneList" class="checkbox-list">
+    <p class="hint">Loading zones...</p>
+</div>
+
+<hr class="divider">
+
+<h2>Excluded Capabilities</h2>
+<p class="hint">Capability patterns to exclude (e.g. speaker_*, measure_power). Press Enter to add.</p>
+<div id="capTags" class="tags"></div>
+<input type="text" id="capInput" placeholder="speaker_*">
+
+<hr class="divider">
+
+<h2>Statistics</h2>
+<div class="stats">
+    <div class="stat">
+        <div class="stat-value" id="statCapEvents">&mdash;</div>
+        <div class="stat-label">Device events</div>
+    </div>
+    <div class="stat">
+        <div class="stat-value" id="statCustomEvents">&mdash;</div>
+        <div class="stat-label">Custom events</div>
+    </div>
+    <div class="stat">
+        <div class="stat-value" id="statSummaries">&mdash;</div>
+        <div class="stat-label">Summaries</div>
+    </div>
+</div>
+
+<hr class="divider">
+
+<div class="btn-row">
+    <button class="btn btn-primary" id="btnSave">Save Settings</button>
+</div>
+<div id="saveResult"></div>
+
+<script>
+    function onHomeyReady(Homey) {
+        const $ = (id) => document.getElementById(id);
+
+        let zones = [];
+        let excludedZones = [];
+        let excludedCaps = [];
+        let providers = {};
+
+        // Load all data on mount.
+        Promise.all([
+            Homey.api('GET', '/settings'),
+            Homey.api('GET', '/stats'),
+            Homey.api('GET', '/zones').catch(() => [])
+        ]).then(([settings, stats, zonesData]) => {
+            providers = settings.providers || {};
+
+            // Provider.
+            $('provider').value = settings.provider || 'anthropic';
+            updateProviderUI(settings.provider || 'anthropic');
+
+            // API keys.
+            $('apiKeyAnthropicInput').value = settings.apiKeyAnthropic || '';
+            $('apiKeyOpenaiInput').value = settings.apiKeyOpenai || '';
+            $('apiKeyGeminiInput').value = settings.apiKeyGemini || '';
+
+            // Model.
+            updateModelDropdown(settings.provider || 'anthropic', settings.defaultModel);
+
+            // Tracking.
+            $('sampleInterval').value = settings.sampleInterval || 15;
+            $('retentionDays').value = settings.retentionDays || 30;
+
+            excludedZones = settings.excludedZones || [];
+            excludedCaps = settings.excludedCapabilities || [];
+
+            // Stats.
+            $('statCapEvents').textContent = stats.capabilityEvents.toLocaleString();
+            $('statCustomEvents').textContent = stats.customEvents.toLocaleString();
+            $('statSummaries').textContent = stats.summaries.toLocaleString();
+
+            // Zones & cap tags.
+            zones = zonesData;
+            renderZones();
+            renderCapTags();
+
+            Homey.ready();
+        });
+
+        // Provider switching.
+        $('provider').addEventListener('change', (e) => {
+            const provider = e.target.value;
+            updateProviderUI(provider);
+            updateModelDropdown(provider);
+        });
+
+        function updateProviderUI(provider) {
+            document.querySelectorAll('.api-key-group').forEach(el => el.classList.remove('active'));
+            const group = $('apiKey' + provider.charAt(0).toUpperCase() + provider.slice(1));
+            if (group) {
+                group.classList.add('active');
+            }
+        }
+
+        function updateModelDropdown(provider, selectedModel) {
+            const select = $('defaultModel');
+            const providerDef = providers[provider];
+            if (!providerDef) {
+                return;
+            }
+
+            select.innerHTML = '';
+
+            for (const model of providerDef.models) {
+                const option = document.createElement('option');
+                option.value = model.id;
+                option.textContent = model.name;
+                select.appendChild(option);
+            }
+
+            if (selectedModel) {
+                select.value = selectedModel;
+            }
+
+            // If the selected model is not in the list, default to the provider's default.
+            if (!select.value) {
+                select.value = providerDef.defaultModel;
+            }
+        }
+
+        function renderZones() {
+            const container = $('zoneList');
+            container.innerHTML = '';
+
+            if (zones.length === 0) {
+                const hint = document.createElement('p');
+                hint.className = 'hint';
+                hint.textContent = 'No zones found.';
+                container.appendChild(hint);
+                return;
+            }
+
+            zones.sort((a, b) => a.name.localeCompare(b.name)).forEach((zone) => {
+                const label = document.createElement('label');
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.value = zone.name;
+                checkbox.checked = excludedZones.includes(zone.name);
+                checkbox.addEventListener('change', () => {
+                    if (checkbox.checked) {
+                        if (!excludedZones.includes(zone.name)) {
+                            excludedZones.push(zone.name);
+                        }
+                    } else {
+                        excludedZones = excludedZones.filter((z) => z !== zone.name);
+                    }
+                });
+                label.appendChild(checkbox);
+                label.appendChild(document.createTextNode(' ' + zone.name));
+                container.appendChild(label);
+            });
+        }
+
+        function renderCapTags() {
+            const container = $('capTags');
+            container.innerHTML = '';
+
+            excludedCaps.forEach((cap, i) => {
+                const span = document.createElement('span');
+                span.className = 'tag';
+                span.appendChild(document.createTextNode(cap));
+
+                const btn = document.createElement('button');
+                btn.textContent = '\u00d7';
+                btn.addEventListener('click', () => {
+                    excludedCaps.splice(i, 1);
+                    renderCapTags();
+                });
+
+                span.appendChild(btn);
+                container.appendChild(span);
+            });
+        }
+
+        $('capInput').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const val = e.target.value.trim();
+                if (val && !excludedCaps.includes(val)) {
+                    excludedCaps.push(val);
+                    renderCapTags();
+                }
+                e.target.value = '';
+            }
+        });
+
+        function collectSettings() {
+            return {
+                'pulse-provider': $('provider').value,
+                'pulse-api-key-anthropic': $('apiKeyAnthropicInput').value,
+                'pulse-api-key-openai': $('apiKeyOpenaiInput').value,
+                'pulse-api-key-gemini': $('apiKeyGeminiInput').value,
+                'pulse-default-model': $('defaultModel').value,
+                'pulse-sample-interval': parseInt($('sampleInterval').value) || 15,
+                'pulse-retention-days': parseInt($('retentionDays').value) || 30,
+                'pulse-excluded-zones': excludedZones,
+                'pulse-excluded-capabilities': excludedCaps
+            };
+        }
+
+        $('btnTestConnection').addEventListener('click', async () => {
+            const el = $('testResult');
+            el.className = '';
+            el.textContent = 'Testing...';
+
+            // Save the provider and the active API key first so the server uses them.
+            const provider = $('provider').value;
+            const keyMap = {
+                anthropic: 'pulse-api-key-anthropic',
+                openai: 'pulse-api-key-openai',
+                gemini: 'pulse-api-key-gemini'
+            };
+            const inputMap = {
+                anthropic: 'apiKeyAnthropicInput',
+                openai: 'apiKeyOpenaiInput',
+                gemini: 'apiKeyGeminiInput'
+            };
+
+            const preSave = {
+                'pulse-provider': provider
+            };
+            preSave[keyMap[provider]] = $(inputMap[provider]).value;
+
+            await Homey.api('PUT', '/settings', preSave);
+
+            try {
+                await Homey.api('POST', '/test-connection');
+                el.className = 'msg-success';
+                el.textContent = 'Connection successful!';
+            } catch (err) {
+                el.className = 'msg-error';
+                el.textContent = 'Connection failed: ' + (err.message || err);
+            }
+        });
+
+        $('btnSave').addEventListener('click', async () => {
+            const el = $('saveResult');
+            el.className = '';
+            el.textContent = 'Saving...';
+
+            try {
+                await Homey.api('PUT', '/settings', collectSettings());
+
+                el.className = 'msg-success';
+                el.textContent = 'Settings saved!';
+            } catch (err) {
+                el.className = 'msg-error';
+                el.textContent = 'Failed to save: ' + (err.message || err);
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

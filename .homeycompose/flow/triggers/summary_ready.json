@@ -1,0 +1,102 @@
+{
+    "id": "summary_ready",
+    "title": {
+        "en": "Summary ready",
+        "nl": "Samenvatting gereed",
+        "de": "Zusammenfassung bereit",
+        "fr": "Resume pret",
+        "it": "Riepilogo pronto",
+        "sv": "Sammanfattning klar",
+        "no": "Sammendrag klart",
+        "es": "Resumen listo",
+        "da": "Opsummering klar",
+        "ru": "Сводка готова",
+        "pl": "Raport gotowy",
+        "ko": "요약 준비됨",
+        "ar": "الملخص جاهز"
+    },
+    "hint": {
+        "en": "Triggers when an AI summary has been generated.",
+        "nl": "Triggert wanneer een AI-samenvatting is gegenereerd.",
+        "de": "Wird ausgelost wenn eine KI-Zusammenfassung erstellt wurde.",
+        "fr": "Se declenche lorsqu'un resume IA a ete genere.",
+        "it": "Si attiva quando un riepilogo AI e stato generato.",
+        "sv": "Utloses nar en AI-sammanfattning har genererats.",
+        "no": "Utloses nar et AI-sammendrag har blitt generert.",
+        "es": "Se activa cuando se ha generado un resumen de IA.",
+        "da": "Udloses nar en AI-opsummering er blevet genereret.",
+        "ru": "Срабатывает когда AI-сводка была создана.",
+        "pl": "Wyzwalany gdy raport AI zostanie wygenerowany.",
+        "ko": "AI 요약이 생성되었을 때 트리거됩니다.",
+        "ar": "يتم تشغيله عندما يتم انشاء ملخص الذكاء الاصطناعي."
+    },
+    "tokens": [
+        {
+            "name": "summary",
+            "type": "string",
+            "title": {
+                "en": "Summary",
+                "nl": "Samenvatting",
+                "de": "Zusammenfassung",
+                "fr": "Resume",
+                "it": "Riepilogo",
+                "sv": "Sammanfattning",
+                "no": "Sammendrag",
+                "es": "Resumen",
+                "da": "Opsummering",
+                "ru": "Сводка",
+                "pl": "Raport",
+                "ko": "요약",
+                "ar": "الملخص"
+            },
+            "example": {
+                "en": "Today was a quiet day. Motion detected 12 times, mostly in the hallway.",
+                "nl": "Vandaag was een rustige dag. Beweging 12 keer gedetecteerd, voornamelijk in de gang."
+            }
+        },
+        {
+            "name": "date",
+            "type": "string",
+            "title": {
+                "en": "Date",
+                "nl": "Datum",
+                "de": "Datum",
+                "fr": "Date",
+                "it": "Data",
+                "sv": "Datum",
+                "no": "Dato",
+                "es": "Fecha",
+                "da": "Dato",
+                "ru": "Дата",
+                "pl": "Data",
+                "ko": "날짜",
+                "ar": "التاريخ"
+            },
+            "example": {
+                "en": "2025-03-31"
+            }
+        },
+        {
+            "name": "event_count",
+            "type": "number",
+            "title": {
+                "en": "Event count",
+                "nl": "Aantal events",
+                "de": "Anzahl Ereignisse",
+                "fr": "Nombre d'evenements",
+                "it": "Conteggio eventi",
+                "sv": "Antal handelser",
+                "no": "Antall hendelser",
+                "es": "Cantidad de eventos",
+                "da": "Antal haendelser",
+                "ru": "Количество событий",
+                "pl": "Liczba zdarzen",
+                "ko": "이벤트 수",
+                "ar": "عدد الاحداث"
+            },
+            "example": {
+                "en": "142"
+            }
+        }
+    ]
+}

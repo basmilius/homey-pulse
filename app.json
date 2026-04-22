@@ -1,0 +1,553 @@
+{
+  "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
+  "id": "com.basmilius.pulse",
+  "version": "1.0.0",
+  "compatibility": ">=12.4.0",
+  "sdk": 3,
+  "brandColor": "#dc2626",
+  "platforms": [
+    "local"
+  ],
+  "name": {
+    "en": "Pulse",
+    "nl": "Pulse"
+  },
+  "description": {
+    "en": "The pulse of your smart home. Automatic tracking with AI-powered insights.",
+    "nl": "De hartslag van je smart home. Automatische tracking met AI-gestuurde inzichten."
+  },
+  "category": [
+    "tools"
+  ],
+  "tags": {
+    "en": [
+      "pulse",
+      "log",
+      "history",
+      "ai",
+      "insights",
+      "tracker",
+      "events",
+      "automation"
+    ],
+    "nl": [
+      "pulse",
+      "logboek",
+      "geschiedenis",
+      "ai",
+      "inzichten",
+      "tracker",
+      "events",
+      "automatisering"
+    ]
+  },
+  "permissions": [
+    "homey:manager:api"
+  ],
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "author": {
+    "name": "Bas Milius",
+    "email": "bas@mili.us"
+  },
+  "bugs": {
+    "url": "https://github.com/basmilius/homey-pulse/issues"
+  },
+  "homepage": "https://bas.dev",
+  "source": "https://github.com/basmilius/homey-pulse",
+  "support": "https://github.com/basmilius/homey-pulse/issues",
+  "contributing": {
+    "donate": {
+      "paypal": {
+        "username": "basmilius"
+      },
+      "githubSponsors": {
+        "username": "basmilius"
+      }
+    }
+  },
+  "api": {
+    "getSettings": {
+      "method": "GET",
+      "path": "/settings"
+    },
+    "saveSettings": {
+      "method": "PUT",
+      "path": "/settings"
+    },
+    "testConnection": {
+      "method": "POST",
+      "path": "/test-connection"
+    },
+    "getStats": {
+      "method": "GET",
+      "path": "/stats"
+    },
+    "getZones": {
+      "method": "GET",
+      "path": "/zones"
+    }
+  },
+  "flow": {
+    "triggers": [
+      {
+        "id": "anomaly_detected",
+        "title": {
+          "en": "Anomaly detected",
+          "nl": "Anomalie gedetecteerd",
+          "de": "Anomalie erkannt",
+          "fr": "Anomalie detectee",
+          "it": "Anomalia rilevata",
+          "sv": "Avvikelse upptackt",
+          "no": "Avvik oppdaget",
+          "es": "Anomalia detectada",
+          "da": "Anomali registreret",
+          "ru": "Обнаружена аномалия",
+          "pl": "Wykryto anomalie",
+          "ko": "이상 감지됨",
+          "ar": "تم اكتشاف شذوذ"
+        },
+        "hint": {
+          "en": "Triggers when Claude detects unusual activity in the home events.",
+          "nl": "Triggert wanneer Claude ongebruikelijke activiteit in de huisevents detecteert.",
+          "de": "Wird ausgelost wenn Claude ungewohnliche Aktivitat in den Hausereignissen erkennt.",
+          "fr": "Se declenche lorsque Claude detecte une activite inhabituelle dans les evenements de la maison.",
+          "it": "Si attiva quando Claude rileva attivita insolita negli eventi domestici.",
+          "sv": "Utloses nar Claude upptacker ovanlig aktivitet i hemhandelserna.",
+          "no": "Utloses nar Claude oppdager uvanlig aktivitet i hjemmehendelsene.",
+          "es": "Se activa cuando Claude detecta actividad inusual en los eventos del hogar.",
+          "da": "Udloses nar Claude opdager usaedvanlig aktivitet i hjemmehaendelserne.",
+          "ru": "Срабатывает когда Claude обнаруживает необычную активность в домашних событиях.",
+          "pl": "Wyzwalany gdy Claude wykryje nietypowa aktywnosc w zdarzeniach domowych.",
+          "ko": "Claude가 집 이벤트에서 비정상적인 활동을 감지했을 때 트리거됩니다.",
+          "ar": "يتم تشغيله عندما يكتشف Claude نشاطا غير عادي في احداث المنزل."
+        },
+        "tokens": [
+          {
+            "name": "description",
+            "type": "string",
+            "title": {
+              "en": "Description",
+              "nl": "Beschrijving",
+              "de": "Beschreibung",
+              "fr": "Description",
+              "it": "Descrizione",
+              "sv": "Beskrivning",
+              "no": "Beskrivelse",
+              "es": "Descripcion",
+              "da": "Beskrivelse",
+              "ru": "Описание",
+              "pl": "Opis",
+              "ko": "설명",
+              "ar": "الوصف"
+            },
+            "example": {
+              "en": "Unusual motion detected in the garage at 3:00 AM, while no one is typically home.",
+              "nl": "Ongebruikelijke beweging gedetecteerd in de garage om 3:00 uur, terwijl normaal niemand thuis is."
+            }
+          },
+          {
+            "name": "severity",
+            "type": "string",
+            "title": {
+              "en": "Severity",
+              "nl": "Ernst",
+              "de": "Schweregrad",
+              "fr": "Gravite",
+              "it": "Gravita",
+              "sv": "Allvarlighetsgrad",
+              "no": "Alvorlighetsgrad",
+              "es": "Gravedad",
+              "da": "Alvorlighedsgrad",
+              "ru": "Серьезность",
+              "pl": "Waznosc",
+              "ko": "심각도",
+              "ar": "الخطورة"
+            },
+            "example": {
+              "en": "warning"
+            }
+          }
+        ]
+      },
+      {
+        "id": "summary_ready",
+        "title": {
+          "en": "Summary ready",
+          "nl": "Samenvatting gereed",
+          "de": "Zusammenfassung bereit",
+          "fr": "Resume pret",
+          "it": "Riepilogo pronto",
+          "sv": "Sammanfattning klar",
+          "no": "Sammendrag klart",
+          "es": "Resumen listo",
+          "da": "Opsummering klar",
+          "ru": "Сводка готова",
+          "pl": "Raport gotowy",
+          "ko": "요약 준비됨",
+          "ar": "الملخص جاهز"
+        },
+        "hint": {
+          "en": "Triggers when an AI summary has been generated.",
+          "nl": "Triggert wanneer een AI-samenvatting is gegenereerd.",
+          "de": "Wird ausgelost wenn eine KI-Zusammenfassung erstellt wurde.",
+          "fr": "Se declenche lorsqu'un resume IA a ete genere.",
+          "it": "Si attiva quando un riepilogo AI e stato generato.",
+          "sv": "Utloses nar en AI-sammanfattning har genererats.",
+          "no": "Utloses nar et AI-sammendrag har blitt generert.",
+          "es": "Se activa cuando se ha generado un resumen de IA.",
+          "da": "Udloses nar en AI-opsummering er blevet genereret.",
+          "ru": "Срабатывает когда AI-сводка была создана.",
+          "pl": "Wyzwalany gdy raport AI zostanie wygenerowany.",
+          "ko": "AI 요약이 생성되었을 때 트리거됩니다.",
+          "ar": "يتم تشغيله عندما يتم انشاء ملخص الذكاء الاصطناعي."
+        },
+        "tokens": [
+          {
+            "name": "summary",
+            "type": "string",
+            "title": {
+              "en": "Summary",
+              "nl": "Samenvatting",
+              "de": "Zusammenfassung",
+              "fr": "Resume",
+              "it": "Riepilogo",
+              "sv": "Sammanfattning",
+              "no": "Sammendrag",
+              "es": "Resumen",
+              "da": "Opsummering",
+              "ru": "Сводка",
+              "pl": "Raport",
+              "ko": "요약",
+              "ar": "الملخص"
+            },
+            "example": {
+              "en": "Today was a quiet day. Motion detected 12 times, mostly in the hallway.",
+              "nl": "Vandaag was een rustige dag. Beweging 12 keer gedetecteerd, voornamelijk in de gang."
+            }
+          },
+          {
+            "name": "date",
+            "type": "string",
+            "title": {
+              "en": "Date",
+              "nl": "Datum",
+              "de": "Datum",
+              "fr": "Date",
+              "it": "Data",
+              "sv": "Datum",
+              "no": "Dato",
+              "es": "Fecha",
+              "da": "Dato",
+              "ru": "Дата",
+              "pl": "Data",
+              "ko": "날짜",
+              "ar": "التاريخ"
+            },
+            "example": {
+              "en": "2025-03-31"
+            }
+          },
+          {
+            "name": "event_count",
+            "type": "number",
+            "title": {
+              "en": "Event count",
+              "nl": "Aantal events",
+              "de": "Anzahl Ereignisse",
+              "fr": "Nombre d'evenements",
+              "it": "Conteggio eventi",
+              "sv": "Antal handelser",
+              "no": "Antall hendelser",
+              "es": "Cantidad de eventos",
+              "da": "Antal haendelser",
+              "ru": "Количество событий",
+              "pl": "Liczba zdarzen",
+              "ko": "이벤트 수",
+              "ar": "عدد الاحداث"
+            },
+            "example": {
+              "en": "142"
+            }
+          }
+        ]
+      }
+    ],
+    "conditions": [
+      {
+        "id": "event_count_today",
+        "title": {
+          "en": "Event count today is more than...",
+          "nl": "Aantal events vandaag is meer dan...",
+          "de": "Anzahl Ereignisse heute ist mehr als...",
+          "fr": "Le nombre d'evenements aujourd'hui est superieur a...",
+          "it": "Il conteggio eventi di oggi e superiore a...",
+          "sv": "Antal handelser idag ar fler an...",
+          "no": "Antall hendelser i dag er mer enn...",
+          "es": "La cantidad de eventos hoy es mas de...",
+          "da": "Antal haendelser i dag er mere end...",
+          "ru": "Количество событий сегодня больше чем...",
+          "pl": "Liczba zdarzen dzisiaj jest wieksza niz...",
+          "ko": "오늘 이벤트 수가 다음보다 많음...",
+          "ar": "عدد الاحداث اليوم اكثر من..."
+        },
+        "titleFormatted": {
+          "en": "More than [[count]] events of [[capability]] today",
+          "nl": "Meer dan [[count]] events van [[capability]] vandaag",
+          "de": "Mehr als [[count]] Ereignisse von [[capability]] heute",
+          "fr": "Plus de [[count]] evenements de [[capability]] aujourd'hui",
+          "it": "Piu di [[count]] eventi di [[capability]] oggi",
+          "sv": "Fler an [[count]] handelser av [[capability]] idag",
+          "no": "Mer enn [[count]] hendelser av [[capability]] i dag",
+          "es": "Mas de [[count]] eventos de [[capability]] hoy",
+          "da": "Mere end [[count]] haendelser af [[capability]] i dag",
+          "ru": "Более [[count]] событий [[capability]] сегодня",
+          "pl": "Wiecej niz [[count]] zdarzen [[capability]] dzisiaj",
+          "ko": "오늘 [[capability]]의 이벤트가 [[count]]개 이상",
+          "ar": "اكثر من [[count]] حدث من [[capability]] اليوم"
+        },
+        "args": [
+          {
+            "type": "text",
+            "name": "capability",
+            "title": {
+              "en": "Capability",
+              "nl": "Capability",
+              "de": "Fahigkeit",
+              "fr": "Capacite",
+              "it": "Capacita",
+              "sv": "Formaga",
+              "no": "Egenskap",
+              "es": "Capacidad",
+              "da": "Egenskab",
+              "ru": "Свойство",
+              "pl": "Zdolnosc",
+              "ko": "기능",
+              "ar": "القدرة"
+            },
+            "placeholder": {
+              "en": "alarm_motion",
+              "nl": "alarm_motion",
+              "de": "alarm_motion",
+              "fr": "alarm_motion",
+              "it": "alarm_motion",
+              "sv": "alarm_motion",
+              "no": "alarm_motion",
+              "es": "alarm_motion",
+              "da": "alarm_motion",
+              "ru": "alarm_motion",
+              "pl": "alarm_motion",
+              "ko": "alarm_motion",
+              "ar": "alarm_motion"
+            }
+          },
+          {
+            "type": "number",
+            "name": "count",
+            "title": {
+              "en": "Count",
+              "nl": "Aantal",
+              "de": "Anzahl",
+              "fr": "Nombre",
+              "it": "Conteggio",
+              "sv": "Antal",
+              "no": "Antall",
+              "es": "Cantidad",
+              "da": "Antal",
+              "ru": "Количество",
+              "pl": "Liczba",
+              "ko": "수",
+              "ar": "العدد"
+            },
+            "min": 1,
+            "step": 1,
+            "placeholder": {
+              "en": "10"
+            }
+          }
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "generate_summary",
+        "title": {
+          "en": "Generate a daily summary",
+          "nl": "Genereer een dagelijkse samenvatting",
+          "de": "Eine tagliche Zusammenfassung erstellen",
+          "fr": "Generer un resume quotidien",
+          "it": "Genera un riepilogo giornaliero",
+          "sv": "Generera en daglig sammanfattning",
+          "no": "Generer et daglig sammendrag",
+          "es": "Generar un resumen diario",
+          "da": "Generer en daglig opsummering",
+          "ru": "Создать ежедневную сводку",
+          "pl": "Wygeneruj dzienny raport",
+          "ko": "일일 요약 생성",
+          "ar": "انشاء ملخص يومي"
+        },
+        "titleFormatted": {
+          "en": "Generate a summary for today",
+          "nl": "Genereer een samenvatting voor vandaag",
+          "de": "Eine Zusammenfassung fur heute erstellen",
+          "fr": "Generer un resume pour aujourd'hui",
+          "it": "Genera un riepilogo per oggi",
+          "sv": "Generera en sammanfattning for idag",
+          "no": "Generer et sammendrag for i dag",
+          "es": "Generar un resumen para hoy",
+          "da": "Generer en opsummering for i dag",
+          "ru": "Создать сводку за сегодня",
+          "pl": "Wygeneruj raport na dzis",
+          "ko": "오늘의 요약 생성",
+          "ar": "انشاء ملخص لليوم"
+        },
+        "hint": {
+          "en": "Generates an AI summary of today's home activity. Fires the 'Summary ready' trigger when done.",
+          "nl": "Genereert een AI-samenvatting van de huisactiviteit van vandaag. Activeert de 'Samenvatting gereed' trigger wanneer klaar.",
+          "de": "Erstellt eine KI-Zusammenfassung der heutigen Hausaktivitat. Lost den Trigger 'Zusammenfassung bereit' aus wenn fertig.",
+          "fr": "Genere un resume IA de l'activite de la maison aujourd'hui. Declenche le trigger 'Resume pret' une fois termine.",
+          "it": "Genera un riepilogo AI dell'attivita domestica di oggi. Attiva il trigger 'Riepilogo pronto' al termine.",
+          "sv": "Genererar en AI-sammanfattning av dagens hemaktivitet. Utloser triggern 'Sammanfattning klar' nar den ar fardig.",
+          "no": "Genererer et AI-sammendrag av dagens hjemmeaktivitet. Utloser triggeren 'Sammendrag klart' nar den er ferdig.",
+          "es": "Genera un resumen de IA de la actividad del hogar de hoy. Activa el disparador 'Resumen listo' cuando termina.",
+          "da": "Genererer en AI-opsummering af dagens hjemmeaktivitet. Udloser triggeren 'Opsummering klar' nar den er faerdig.",
+          "ru": "Создает AI-сводку домашней активности за сегодня. Активирует триггер 'Сводка готова' по завершении.",
+          "pl": "Generuje podsumowanie AI aktywnosci domowej z dzisiaj. Uruchamia wyzwalacz 'Raport gotowy' po zakonczeniu.",
+          "ko": "오늘의 집 활동에 대한 AI 요약을 생성합니다. 완료 시 '요약 준비됨' 트리거가 발생합니다.",
+          "ar": "ينشئ ملخص ذكاء اصطناعي لنشاط المنزل اليوم. يشغل مشغل 'الملخص جاهز' عند الانتهاء."
+        },
+        "tokens": [
+          {
+            "name": "summary",
+            "type": "string",
+            "title": {
+              "en": "Summary",
+              "nl": "Samenvatting",
+              "de": "Zusammenfassung",
+              "fr": "Resume",
+              "it": "Riepilogo",
+              "sv": "Sammanfattning",
+              "no": "Sammendrag",
+              "es": "Resumen",
+              "da": "Opsummering",
+              "ru": "Сводка",
+              "pl": "Raport",
+              "ko": "요약",
+              "ar": "الملخص"
+            },
+            "example": {
+              "en": "Today was a quiet day. Motion detected 12 times, mostly in the hallway. Temperature stayed between 19-22 degrees.",
+              "nl": "Vandaag was een rustige dag. Beweging 12 keer gedetecteerd, voornamelijk in de gang. Temperatuur bleef tussen 19-22 graden."
+            }
+          }
+        ]
+      },
+      {
+        "id": "log_event",
+        "title": {
+          "en": "Log a custom event",
+          "nl": "Log een aangepast event",
+          "de": "Ein benutzerdefiniertes Ereignis protokollieren",
+          "fr": "Enregistrer un evenement personnalise",
+          "it": "Registra un evento personalizzato",
+          "sv": "Logga en anpassad handelse",
+          "no": "Logg en egendefinert hendelse",
+          "es": "Registrar un evento personalizado",
+          "da": "Log en brugerdefineret haendelse",
+          "ru": "Записать пользовательское событие",
+          "pl": "Zapisz niestandardowe zdarzenie",
+          "ko": "사용자 정의 이벤트 기록",
+          "ar": "تسجيل حدث مخصص"
+        },
+        "titleFormatted": {
+          "en": "Log event [[message]] in category [[category]]",
+          "nl": "Log event [[message]] in categorie [[category]]",
+          "de": "Ereignis [[message]] in Kategorie [[category]] protokollieren",
+          "fr": "Enregistrer l'evenement [[message]] dans la categorie [[category]]",
+          "it": "Registra evento [[message]] nella categoria [[category]]",
+          "sv": "Logga handelse [[message]] i kategori [[category]]",
+          "no": "Logg hendelse [[message]] i kategori [[category]]",
+          "es": "Registrar evento [[message]] en categoria [[category]]",
+          "da": "Log haendelse [[message]] i kategori [[category]]",
+          "ru": "Записать событие [[message]] в категорию [[category]]",
+          "pl": "Zapisz zdarzenie [[message]] w kategorii [[category]]",
+          "ko": "카테고리 [[category]]에 이벤트 [[message]] 기록",
+          "ar": "تسجيل الحدث [[message]] في الفئة [[category]]"
+        },
+        "args": [
+          {
+            "type": "text",
+            "name": "category",
+            "title": {
+              "en": "Category",
+              "nl": "Categorie",
+              "de": "Kategorie",
+              "fr": "Categorie",
+              "it": "Categoria",
+              "sv": "Kategori",
+              "no": "Kategori",
+              "es": "Categoria",
+              "da": "Kategori",
+              "ru": "Категория",
+              "pl": "Kategoria",
+              "ko": "카테고리",
+              "ar": "الفئة"
+            },
+            "placeholder": {
+              "en": "motion",
+              "nl": "beweging",
+              "de": "Bewegung",
+              "fr": "mouvement",
+              "it": "movimento",
+              "sv": "rorelse",
+              "no": "bevegelse",
+              "es": "movimiento",
+              "da": "bevaegelse",
+              "ru": "движение",
+              "pl": "ruch",
+              "ko": "모션",
+              "ar": "حركة"
+            }
+          },
+          {
+            "type": "text",
+            "name": "message",
+            "title": {
+              "en": "Message",
+              "nl": "Bericht",
+              "de": "Nachricht",
+              "fr": "Message",
+              "it": "Messaggio",
+              "sv": "Meddelande",
+              "no": "Melding",
+              "es": "Mensaje",
+              "da": "Besked",
+              "ru": "Сообщение",
+              "pl": "Wiadomosc",
+              "ko": "메시지",
+              "ar": "الرسالة"
+            },
+            "placeholder": {
+              "en": "Motion detected at front door",
+              "nl": "Beweging gedetecteerd bij de voordeur",
+              "de": "Bewegung an der Haustur erkannt",
+              "fr": "Mouvement detecte a la porte d'entree",
+              "it": "Movimento rilevato alla porta d'ingresso",
+              "sv": "Rorelse upptackt vid ytterdorren",
+              "no": "Bevegelse oppdaget ved ytterdoren",
+              "es": "Movimiento detectado en la puerta principal",
+              "da": "Bevaegelse registreret ved hoveddoren",
+              "ru": "Обнаружено движение у входной двери",
+              "pl": "Wykryto ruch przy drzwiach wejsciowych",
+              "ko": "현관문에서 모션 감지됨",
+              "ar": "تم اكتشاف حركة عند الباب الامامي"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

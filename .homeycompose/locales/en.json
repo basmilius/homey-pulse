@@ -1,0 +1,44 @@
+{
+    "notification": {
+        "welcome": "Welcome to **Pulse**! Go to the app settings to configure your API key and tracking preferences."
+    },
+    "settings": {
+        "title": "Pulse",
+        "subtitle": "Configure your smart home pulse",
+        "api_key": {
+            "title": "API Key",
+            "description": "Your Anthropic API key for AI-powered summaries. You can find or create one at platform.claude.com.",
+            "placeholder": "sk-ant-..."
+        },
+        "model": {
+            "title": "Default Model",
+            "description": "The Claude model to use for generating summaries."
+        },
+        "sample_interval": {
+            "title": "Sample Interval (minutes)",
+            "description": "How often measurement values (temperature, power, etc.) are sampled. Lower values capture more detail but use more storage."
+        },
+        "retention_days": {
+            "title": "Retention (days)",
+            "description": "How many days of event data to keep. Older events are automatically deleted when a summary is generated."
+        },
+        "excluded_zones": {
+            "title": "Excluded Zones",
+            "description": "Zones to exclude from tracking."
+        },
+        "excluded_capabilities": {
+            "title": "Excluded Capabilities",
+            "description": "Capability types to exclude from tracking. Use * as wildcard (e.g. speaker_*)."
+        },
+        "save": {
+            "button": "Save Settings",
+            "success": "Settings saved!",
+            "error": "Failed to save: {{error}}"
+        },
+        "test": {
+            "button": "Test Connection",
+            "success": "Connection successful!",
+            "error": "Connection failed: {{error}}"
+        }
+    }
+}

@@ -1,0 +1,93 @@
+{
+    "id": "event_count_today",
+    "title": {
+        "en": "Event count today is more than...",
+        "nl": "Aantal events vandaag is meer dan...",
+        "de": "Anzahl Ereignisse heute ist mehr als...",
+        "fr": "Le nombre d'evenements aujourd'hui est superieur a...",
+        "it": "Il conteggio eventi di oggi e superiore a...",
+        "sv": "Antal handelser idag ar fler an...",
+        "no": "Antall hendelser i dag er mer enn...",
+        "es": "La cantidad de eventos hoy es mas de...",
+        "da": "Antal haendelser i dag er mere end...",
+        "ru": "Количество событий сегодня больше чем...",
+        "pl": "Liczba zdarzen dzisiaj jest wieksza niz...",
+        "ko": "오늘 이벤트 수가 다음보다 많음...",
+        "ar": "عدد الاحداث اليوم اكثر من..."
+    },
+    "titleFormatted": {
+        "en": "More than [[count]] events of [[capability]] today",
+        "nl": "Meer dan [[count]] events van [[capability]] vandaag",
+        "de": "Mehr als [[count]] Ereignisse von [[capability]] heute",
+        "fr": "Plus de [[count]] evenements de [[capability]] aujourd'hui",
+        "it": "Piu di [[count]] eventi di [[capability]] oggi",
+        "sv": "Fler an [[count]] handelser av [[capability]] idag",
+        "no": "Mer enn [[count]] hendelser av [[capability]] i dag",
+        "es": "Mas de [[count]] eventos de [[capability]] hoy",
+        "da": "Mere end [[count]] haendelser af [[capability]] i dag",
+        "ru": "Более [[count]] событий [[capability]] сегодня",
+        "pl": "Wiecej niz [[count]] zdarzen [[capability]] dzisiaj",
+        "ko": "오늘 [[capability]]의 이벤트가 [[count]]개 이상",
+        "ar": "اكثر من [[count]] حدث من [[capability]] اليوم"
+    },
+    "args": [
+        {
+            "type": "text",
+            "name": "capability",
+            "title": {
+                "en": "Capability",
+                "nl": "Capability",
+                "de": "Fahigkeit",
+                "fr": "Capacite",
+                "it": "Capacita",
+                "sv": "Formaga",
+                "no": "Egenskap",
+                "es": "Capacidad",
+                "da": "Egenskab",
+                "ru": "Свойство",
+                "pl": "Zdolnosc",
+                "ko": "기능",
+                "ar": "القدرة"
+            },
+            "placeholder": {
+                "en": "alarm_motion",
+                "nl": "alarm_motion",
+                "de": "alarm_motion",
+                "fr": "alarm_motion",
+                "it": "alarm_motion",
+                "sv": "alarm_motion",
+                "no": "alarm_motion",
+                "es": "alarm_motion",
+                "da": "alarm_motion",
+                "ru": "alarm_motion",
+                "pl": "alarm_motion",
+                "ko": "alarm_motion",
+                "ar": "alarm_motion"
+            }
+        },
+        {
+            "type": "number",
+            "name": "count",
+            "title": {
+                "en": "Count",
+                "nl": "Aantal",
+                "de": "Anzahl",
+                "fr": "Nombre",
+                "it": "Conteggio",
+                "sv": "Antal",
+                "no": "Antall",
+                "es": "Cantidad",
+                "da": "Antal",
+                "ru": "Количество",
+                "pl": "Liczba",
+                "ko": "수",
+                "ar": "العدد"
+            },
+            "min": 1,
+            "step": 1,
+            "placeholder": {
+                "en": "10"
+            }
+        }
+    ]
+}
