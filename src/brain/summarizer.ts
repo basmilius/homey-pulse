@@ -1,11 +1,25 @@
 import { Shortcuts } from '@basmilius/homey-common';
+import { createRequire } from 'node:module';
+import path from 'node:path';
 import { DEFAULT_PROVIDER, PROVIDERS, SETTING_API_KEY, SETTING_API_KEY_ANTHROPIC, SETTING_API_KEY_GEMINI, SETTING_API_KEY_OPENAI, SETTING_DEFAULT_MODEL, SETTING_PROVIDER } from '../const';
 import type { ProviderType } from '../const';
 import { Triggers } from '../flow';
 import type { PulseApp } from '../types';
 import { formatLocalTime, getLocalDateString, getLocalDayRange, withRetry } from '../util';
-import { AnthropicProvider, GeminiProvider, OpenAiProvider } from './providers';
 import type { AiProvider } from './providers';
+
+type AiProviderConstructor = new (apiKey: string) => AiProvider;
+type ProviderModule = { default: AiProviderConstructor };
+
+/**
+ * Lazy-loads provider bundles from the sibling `providers/` directory that the
+ * build emits. Each bundle inlines exactly one AI SDK, so only the active
+ * provider pays the import cost at runtime.
+ *
+ * We use `createRequire` instead of the ambient `require` so esbuild doesn't
+ * try to trace the dynamic path during bundling.
+ */
+const requireProvider = createRequire(__filename);
 
 const SYSTEM_PROMPT = `You are a smart home analyst. You analyze daily home activity data and produce a JSON response with a summary and any detected anomalies.
 
@@ -36,19 +50,16 @@ export default class Summarizer extends Shortcuts<PulseApp> {
 
     /**
      * Creates the appropriate AI provider based on the user's settings.
+     * The provider bundle is loaded on demand so only the active SDK is
+     * resident in memory.
      */
-    createProvider(): AiProvider {
+    async createProvider(): Promise<AiProvider> {
         const providerType = this.#getProviderType();
         const apiKey = this.#getApiKey(providerType);
+        const providerPath = path.join(__dirname, 'providers', providerType);
+        const providerModule = requireProvider(providerPath) as ProviderModule;
 
-        switch (providerType) {
-            case 'anthropic':
-                return new AnthropicProvider(apiKey);
-            case 'openai':
-                return new OpenAiProvider(apiKey);
-            case 'gemini':
-                return new GeminiProvider(apiKey);
-        }
+        return new providerModule.default(apiKey);
     }
 
     /**
@@ -90,7 +101,7 @@ export default class Summarizer extends Shortcuts<PulseApp> {
 
         // Build the prompt and call the AI provider.
         const prompt = this.#buildPrompt(timeZone, targetDate, capabilityEvents, customEvents, recentSummaries);
-        const provider = this.createProvider();
+        const provider = await this.createProvider();
         const model = this.#getModel();
 
         const response = await withRetry(

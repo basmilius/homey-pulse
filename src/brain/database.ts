@@ -1,15 +1,22 @@
-import { Database } from 'node-sqlite3-wasm';
 import { Shortcuts } from '@basmilius/homey-common';
+import { DatabaseSync } from 'node:sqlite';
+import type { StatementSync } from 'node:sqlite';
 import { DATABASE_PATH, DEBUG_MODE, DEFAULT_RETENTION_DAYS, SETTING_RETENTION_DAYS } from '../const';
 import { getLocalDateString } from '../util';
 import type { CapabilityEvent, CustomEvent, PulseApp, Summary } from '../types';
 
+type SqlValue = string | number | null;
+
 /**
  * SQLite database wrapper for persistent event and summary storage.
- * Uses node-sqlite3-wasm for WASM-based SQLite that works on Homey's ARM platform.
+ *
+ * Uses Node's built-in `node:sqlite` (available since Node 22) so we don't
+ * have to ship a WASM-based SQLite runtime. Prepared statements are cached
+ * per SQL string for repeated calls.
  */
 export default class PulseDatabase extends Shortcuts<PulseApp> {
-    #db: InstanceType<typeof Database> | null = null;
+    #db: DatabaseSync | null = null;
+    readonly #stmtCache = new Map<string, StatementSync>();
 
     constructor(app: PulseApp) {
         super(app);
@@ -19,7 +26,7 @@ export default class PulseDatabase extends Shortcuts<PulseApp> {
      * Opens the database and creates the schema if needed.
      */
     open(): void {
-        this.#db = new Database(DATABASE_PATH);
+        this.#db = new DatabaseSync(DATABASE_PATH);
 
         this.#db.exec(`
             CREATE TABLE IF NOT EXISTS capability_events (
@@ -62,6 +69,7 @@ export default class PulseDatabase extends Shortcuts<PulseApp> {
      */
     close(): void {
         if (this.#db) {
+            this.#stmtCache.clear();
             this.#db.close();
             this.#db = null;
             this.app.log('Database closed.');
@@ -82,10 +90,9 @@ export default class PulseDatabase extends Shortcuts<PulseApp> {
             this.app.log(`[DEBUG] DB insert capability_event: ${deviceName} (${zoneName}) / ${capability} = ${value}`);
         }
 
-        this.#requireDb().run(
-            'INSERT INTO capability_events (device_id, device_name, zone_name, capability, value, timestamp) VALUES (?, ?, ?, ?, ?, ?)',
-            [deviceId, deviceName, zoneName, capability, value, Date.now()]
-        );
+        this.#prepare(
+            'INSERT INTO capability_events (device_id, device_name, zone_name, capability, value, timestamp) VALUES (?, ?, ?, ?, ?, ?)'
+        ).run(deviceId, deviceName, zoneName, capability, value, Date.now());
     }
 
     /**
@@ -100,10 +107,9 @@ export default class PulseDatabase extends Shortcuts<PulseApp> {
             this.app.log(`[DEBUG] DB insert custom_event: [${category}] ${message}`);
         }
 
-        this.#requireDb().run(
-            'INSERT INTO custom_events (category, message, source, timestamp) VALUES (?, ?, ?, ?)',
-            [category, message, source, Date.now()]
-        );
+        this.#prepare(
+            'INSERT INTO custom_events (category, message, source, timestamp) VALUES (?, ?, ?, ?)'
+        ).run(category, message, source, Date.now());
     }
 
     /**
@@ -113,10 +119,9 @@ export default class PulseDatabase extends Shortcuts<PulseApp> {
      * @param until - End timestamp (exclusive). Defaults to now.
      */
     getCapabilityEvents(since: number, until: number = Date.now()): CapabilityEvent[] {
-        const rows = this.#requireDb().all(
-            'SELECT id, device_id, device_name, zone_name, capability, value, timestamp FROM capability_events WHERE timestamp >= ? AND timestamp < ? ORDER BY timestamp ASC',
-            [since, until]
-        );
+        const rows = this.#prepare(
+            'SELECT id, device_id, device_name, zone_name, capability, value, timestamp FROM capability_events WHERE timestamp >= ? AND timestamp < ? ORDER BY timestamp ASC'
+        ).all(since, until) as Array<Record<string, SqlValue>>;
 
         return rows.map(mapCapabilityEvent);
     }
@@ -128,10 +133,9 @@ export default class PulseDatabase extends Shortcuts<PulseApp> {
      * @param until - End timestamp (exclusive). Defaults to now.
      */
     getCustomEvents(since: number, until: number = Date.now()): CustomEvent[] {
-        const rows = this.#requireDb().all(
-            'SELECT id, category, message, source, timestamp FROM custom_events WHERE timestamp >= ? AND timestamp < ? ORDER BY timestamp ASC',
-            [since, until]
-        );
+        const rows = this.#prepare(
+            'SELECT id, category, message, source, timestamp FROM custom_events WHERE timestamp >= ? AND timestamp < ? ORDER BY timestamp ASC'
+        ).all(since, until) as Array<Record<string, SqlValue>>;
 
         return rows.map(mapCustomEvent);
     }
@@ -144,10 +148,9 @@ export default class PulseDatabase extends Shortcuts<PulseApp> {
      * @param eventCount - The number of events that were summarized.
      */
     saveSummary(date: string, content: string, eventCount: number): void {
-        this.#requireDb().run(
-            'INSERT OR REPLACE INTO summaries (date, content, event_count, created_at) VALUES (?, ?, ?, ?)',
-            [date, content, eventCount, Date.now()]
-        );
+        this.#prepare(
+            'INSERT OR REPLACE INTO summaries (date, content, event_count, created_at) VALUES (?, ?, ?, ?)'
+        ).run(date, content, eventCount, Date.now());
     }
 
     /**
@@ -156,10 +159,9 @@ export default class PulseDatabase extends Shortcuts<PulseApp> {
      * @param limit - Maximum number of summaries to return.
      */
     getRecentSummaries(limit: number = 7): Summary[] {
-        const rows = this.#requireDb().all(
-            'SELECT id, date, content, event_count, created_at FROM summaries ORDER BY date DESC LIMIT ?',
-            [limit]
-        );
+        const rows = this.#prepare(
+            'SELECT id, date, content, event_count, created_at FROM summaries ORDER BY date DESC LIMIT ?'
+        ).all(limit) as Array<Record<string, SqlValue>>;
 
         return rows.map(mapSummary);
     }
@@ -168,39 +170,37 @@ export default class PulseDatabase extends Shortcuts<PulseApp> {
      * Returns the total number of capability events in the database.
      */
     getCapabilityEventCount(): number {
-        const row = this.#requireDb().get('SELECT COUNT(*) as count FROM capability_events');
-        return (row as { count: number }).count;
+        const row = this.#prepare('SELECT COUNT(*) as count FROM capability_events').get() as { count: number };
+        return row.count;
     }
 
     /**
      * Returns the number of capability events for a specific capability since a given timestamp.
-     * More efficient than fetching all events and filtering in JavaScript.
      *
      * @param since - Start timestamp (inclusive).
      * @param capability - The capability ID to count.
      */
     getCapabilityEventCountFor(since: number, capability: string): number {
-        const row = this.#requireDb().get(
-            'SELECT COUNT(*) as count FROM capability_events WHERE timestamp >= ? AND capability = ?',
-            [since, capability]
-        );
-        return (row as { count: number }).count;
+        const row = this.#prepare(
+            'SELECT COUNT(*) as count FROM capability_events WHERE timestamp >= ? AND capability = ?'
+        ).get(since, capability) as { count: number };
+        return row.count;
     }
 
     /**
      * Returns the total number of custom events in the database.
      */
     getCustomEventCount(): number {
-        const row = this.#requireDb().get('SELECT COUNT(*) as count FROM custom_events');
-        return (row as { count: number }).count;
+        const row = this.#prepare('SELECT COUNT(*) as count FROM custom_events').get() as { count: number };
+        return row.count;
     }
 
     /**
      * Returns the total number of summaries in the database.
      */
     getSummaryCount(): number {
-        const row = this.#requireDb().get('SELECT COUNT(*) as count FROM summaries');
-        return (row as { count: number }).count;
+        const row = this.#prepare('SELECT COUNT(*) as count FROM summaries').get() as { count: number };
+        return row.count;
     }
 
     /**
@@ -210,14 +210,12 @@ export default class PulseDatabase extends Shortcuts<PulseApp> {
         const retentionDays = (this.settings.get(SETTING_RETENTION_DAYS) as number | null) ?? DEFAULT_RETENTION_DAYS;
         const cutoff = Date.now() - retentionDays * 86_400_000;
 
-        const db = this.#requireDb();
-
         const cutoffDate = getLocalDateString(this.homey.clock.getTimezone(), new Date(cutoff));
 
-        const capResult = db.run('DELETE FROM capability_events WHERE timestamp < ?', [cutoff]);
-        const customResult = db.run('DELETE FROM custom_events WHERE timestamp < ?', [cutoff]);
-        const summaryResult = db.run('DELETE FROM summaries WHERE date < ?', [cutoffDate]);
-        const totalDeleted = capResult.changes + customResult.changes + summaryResult.changes;
+        const capResult = this.#prepare('DELETE FROM capability_events WHERE timestamp < ?').run(cutoff);
+        const customResult = this.#prepare('DELETE FROM custom_events WHERE timestamp < ?').run(cutoff);
+        const summaryResult = this.#prepare('DELETE FROM summaries WHERE date < ?').run(cutoffDate);
+        const totalDeleted = Number(capResult.changes) + Number(customResult.changes) + Number(summaryResult.changes);
 
         if (totalDeleted > 0) {
             this.app.log(`Purged ${totalDeleted} event(s) older than ${retentionDays} day(s).`);
@@ -226,7 +224,22 @@ export default class PulseDatabase extends Shortcuts<PulseApp> {
         return totalDeleted;
     }
 
-    #requireDb(): InstanceType<typeof Database> {
+    /**
+     * Returns a cached prepared statement for the given SQL, preparing it once.
+     */
+    #prepare(sql: string): StatementSync {
+        const db = this.#requireDb();
+        let stmt = this.#stmtCache.get(sql);
+
+        if (!stmt) {
+            stmt = db.prepare(sql);
+            this.#stmtCache.set(sql, stmt);
+        }
+
+        return stmt;
+    }
+
+    #requireDb(): DatabaseSync {
         if (!this.#db) {
             throw new Error('Database is not open.');
         }
@@ -235,7 +248,7 @@ export default class PulseDatabase extends Shortcuts<PulseApp> {
     }
 }
 
-function mapCapabilityEvent(row: Record<string, unknown>): CapabilityEvent {
+function mapCapabilityEvent(row: Record<string, SqlValue>): CapabilityEvent {
     return {
         id: row.id as number,
         deviceId: row.device_id as string,
@@ -247,7 +260,7 @@ function mapCapabilityEvent(row: Record<string, unknown>): CapabilityEvent {
     };
 }
 
-function mapCustomEvent(row: Record<string, unknown>): CustomEvent {
+function mapCustomEvent(row: Record<string, SqlValue>): CustomEvent {
     return {
         id: row.id as number,
         category: row.category as string,
@@ -257,7 +270,7 @@ function mapCustomEvent(row: Record<string, unknown>): CustomEvent {
     };
 }
 
-function mapSummary(row: Record<string, unknown>): Summary {
+function mapSummary(row: Record<string, SqlValue>): Summary {
     return {
         id: row.id as number,
         date: row.date as string,

@@ -6,7 +6,6 @@
       "name": "com.basmilius.journals",
       "dependencies": {
         "@basmilius/homey-common": "^1.20.0",
-        "node-sqlite3-wasm": "^0.8.42",
       },
       "devDependencies": {
         "@anthropic-ai/sdk": "^0.80.0",
@@ -232,8 +231,6 @@
     "node-domexception": ["node-domexception@1.0.0", "", {}, "sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ=="],
 
     "node-fetch": ["node-fetch@2.7.0", "", { "dependencies": { "whatwg-url": "^5.0.0" }, "peerDependencies": { "encoding": "^0.1.0" }, "optionalPeers": ["encoding"] }, "sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A=="],
-
-    "node-sqlite3-wasm": ["node-sqlite3-wasm@0.8.55", "", {}, "sha512-C2m7JzZgKiv9XVZ1ts9oPmS56PCvyHeQffTOF2KNO2TVZzq5IW2s+NFeEZn+eP6bnAuD2We/O9cOJSjQVf7Xxw=="],
 
     "openai": ["openai@6.33.0", "", { "peerDependencies": { "ws": "^8.18.0", "zod": "^3.25 || ^4.0" }, "optionalPeers": ["ws", "zod"], "bin": { "openai": "bin/cli" } }, "sha512-xAYN1W3YsDXJWA5F277135YfkEk6H7D3D6vWwRhJ3OEkzRgcyK8z/P5P9Gyi/wB4N8kK9kM5ZjprfvyHagKmpw=="],
 

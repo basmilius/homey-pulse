@@ -6,8 +6,7 @@
         "typecheck": "tsc --noEmit"
     },
     "dependencies": {
-        "@basmilius/homey-common": "^1.20.0",
-        "node-sqlite3-wasm": "^0.8.42"
+        "@basmilius/homey-common": "^1.20.0"
     },
     "devDependencies": {
         "@anthropic-ai/sdk": "^0.80.0",

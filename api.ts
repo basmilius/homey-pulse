@@ -48,7 +48,7 @@ module.exports = {
 
     async testConnection({homey}: AppRequest) {
         const app = homey.app as unknown as PulseApp;
-        const provider = app.brain.summarizer.createProvider();
+        const provider = await app.brain.summarizer.createProvider();
         const testModel = app.brain.summarizer.getTestModel();
 
         await provider.testConnection(testModel);
