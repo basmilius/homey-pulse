@@ -1,2 +1,5 @@
 /CODE_OF_CONDUCT.md
 /CONTRIBUTING.md
+
+/build.mjs
+/bun.lock
